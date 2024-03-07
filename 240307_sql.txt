@@ -1,0 +1,68 @@
+
+
+
+1. C(create) - Insert into
+insert into 테이블명(필드1, 필드2, 필드3) values(값1, 값2, 값3);
+테이블 전체 항목 넣을땐 (필드1, 필드2, 필드3) 생략 가능
+
+insert into professor(name, belong, phone) values('이나래','EZN','010-6626-6224');
+
+2. R(read) - select 
+select * from 테이블명;    ( * 은 전체 범위..?)
+
+
+U(update) - update
+
+
+4. D(delete) - delete
+delete from 테이블명 where 조건;
+delete from professor where id = 101;
+
+delete from 테이블명; => 테이블 안의 데이터 전체 삭제
+drop table 테이블명; => 테이블 삭제
+
+primary key => not null, unique
+
+제약 조건
+
+테이블 구조 : schema(스키마) 관계 도식화 방식 => ERD(Entity Relational Diagram)
+
+
+drow.io 사이트
+
+
+table name : student 
+id int 기본키, 자동증가
+name varchar(20)
+belong char3
+tel varchar(13)
+p_id int
+
+create table student(
+id int primary key auto_increment, 
+name varchar(20),
+belong char(3),
+tel varchar(13)
+p_id int);
+
+chcp => 문자셋 확인
+chcp 65001 => UTF8 로 문자셋 변경
+
+
+여러 테이블 생성
+메모장 파일로 테이블 작성 코드 작성
+
+mysql 접속 > 데이터 베이스 접속 > source 파일 경로
+source C:\javawork\mysql\test_schema.sql
+
+메모장 파일로 테이블 데이터 생성
+source C:\javawork\mysql\professor_data.sql
+
+Type 변경
+
+alter table 테이블명
+modify column 컬럼명 바꿀 타입;
+
+
+alter table student 
+modify column id varchar(8);
