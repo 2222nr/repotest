@@ -1,0 +1,133 @@
+1)
+insert into table_name(f1, f2) values(1, 'data1');
+insert into table_name(f1, f2) values(2, 'data2');
+2)
+insert into table_name values (1, 'data1');
+insert into table_name values (2, 'data2');
+3)
+insert into table_name values (1, 'data1'), (2, 'data2');
+
+1. 수학 함수
+
+절대값 : SELECT ABS(값);
+나머지 : SELECT MOD(값1, 값2), 값1 % 값2, 값1 MOD 값2;
+제곱 : SELECT POW(값1, 값2)
+제곱근(루트) :  SELECT SQRT(값)
+
+올림, 반올림, 버림
+올림 : select ceiling(값)
+반올림 : select round(값)
+버림 : select floor(값)
+자릿수 지정 select truncate(값, 자릿수)
+
+난수(Random) : select rand() -> (0~1) 
+select floor (rand() * 10)+1;  => 0 제외 랜덤 숫자 추출
+
+로또 번호 랜덤 추출
+ select floor (rand() * 44)+1 as '1st', 
+ floor(rand() * 44)+1 as '2nd', 
+ floor(rand() * 44)+1 as '3rd', 
+ floor(rand() * 44)+1 as '4th', 
+ floor(rand() * 44)+1 as '5th', 
+ floor(rand() * 44)+1 as '6th';
+
+2. 문자열 함수
+
+문자열 길이 확인
+select bit_length('abc'), char_length('abc'), length('abc');
+select bit_length('가나다'), char_length('가나다'), length('가나다');
+
+문자열 합치기
+SELECT CONCAT('2023', '01', '01');
+SELECT CONCAT_WS('-', '2023', '01', '01');
+
+찾기
+SELECT INSTR('abcd', 'b');  => 반환 값 = 2 
+
+format : SELECT FORMAT(123456789.1234, 자릿수);   => 3자리 마다 콤마 추가 
+date_format
+
+LPAD, RPAD
+SELECT LPAD('1234', 6, '0'), RPAD('1234', 6, '0');
+
+LTRIM/RTRIM/TRIM ★ 많이 씀! => 좌우측 공백(또는 특정 문자) 제거
+SELECT LTRIM(' abc'), RTRIM('abc '), TRIM(' abc ');
+SELECT TRIM(BOTH 'a' FROM 'ababa'); - 문자 ‘a’를 주어진 문자열에의 양끝에서 제거합니다
+
+LEFT, RIGHT, MID
+ SELECT LEFT('가나다라마바', 3), RIGHT('가나다라마바', 3);
+ SELECT MID('aBcDe', 2, 3);
+
+SELECT MID('810203-2145817', 8 ,1) as 성별;
+
+
+test999@gmail.com 에서 아이디 추출
+
+SELECT INSTR('test999@gmail.com', '@');
+select left('test999@gmail.com', 7) as ID; 
+
+SELECT LEFT('test999@gmail.com', INSTR('test999@gmail.com', '@')-1) as 'ID'; 
+
+
+SUBSTRING == MID
+LOCATE == INSTR
+SELECT SUBSTRING_INDEX('aa,bbb,cc,ddd', ',', 2);
+
+
+테이블 생성 
+create table test(addr varchar(100));
+
+데이터 삽입
+insert into values(서울특별시 용산구 서빙고로 137 (용산동6가));
+
+도로명주소 추출
+select substring_index(substring_index(addr, ' ', 3), ' ', -1) as '도로명' from test;
+
+동주소 추출
+SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(addr, '(', -1), ')', 1) as '동주소'  from test;
+
+
+
+3. 날짜 관련 함수
+1) 날짜의 연산 : ADDDATE, SUBDATE, DATE_ADD, DATE_SUB
+SELECT ADDDATE('2020-01-01', INTERVAL 31 DAY);
+ == SELECT DATE('2020-01-01') + INTERVAL 31 DAY ;  
+                  DATE => 주어진 데이터를 날짜로 반환.
+SELECT SUBDATE('2020-01-01', INTERVAL 7 DAY);
+
+SELECT ADDDATE('2024-02-01', INTERVAL 1 MONTH);
+
+
+2) 현재 날짜와 시간 반환
+
+SELECT NOW();  -> 현재 날짜 및 시간
+
+select curdate();  -> 현재 날짜
+
+select curtime();  -> 현재 시간
+
+select sysdate();  == now (시스템 날짜/시간)
+
+
+> test 테이블에 insert_date 필드 추가, default값을 현재 날짜로 처리
+
+alter table test add column insert_date date default (current_date);
+
+
+데이터 타입 date => default 현재 날짜 지정 => default(current_date)
+데이터 타입 datetime => default 현재 시간 지정 => default(current_time) / default current_timestamp / default now()
+
+
+3) 주어진 날짜 데이터에서 원하는 날짜 시간 정보 추출
+select year(now()), 
+month(now()), 
+day(now()), 
+hour(now()), 
+minute(now()), 
+second(now()), 
+microsecond(now());
+
+4) 
+select monthname('2024-03-11');
+
+
