@@ -1,0 +1,23 @@
+import java.text.DecimalFormat;
+
+DecimalFormat df = new DecimalFormat("###,###");
+            String strmoney = df.format(money[i]);
+            System.out.println(strmoney + "원권: " + currentMoney / money[i] + "장");
+
+
+String yesOrNo = "Y";
+yesOrNo = yesOrNo.toUpperCase();	 => 대문자로 저장
+
+
+String[] strJumin = new String[13];
+System.out.print("주민등록번호를 입력하세요(\"-\" 제외) : ");
+String jumin = sc.next();
+strJumin = jumin.split("");	=> 문자열로 나눠 저장 
+
+int[] intJumin = new int[13];
+for(int i=0; i<intJumin.length; i++){
+intJumin[i] = Integer.parseInt(strJumin[i]); }	=> String 배열을 int 타입 배열에 대입 저장
+
+lotto 중복 체크
+
+자판기! 

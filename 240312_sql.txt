@@ -1,0 +1,68 @@
+만나이 
+select concat ('만', floor ((datediff(now(), '2004-08-31')/365)), '세') as '장원영 만 나이',
+concat ('만', floor ((datediff(now(), '2003-09-01')/365)), '세') as '안유진 만 나이';
+
+concat ('만', floor ((datediff(now(), '2004-08-31')/365)), '세')
+
+
+select concat ('만', TIMESTAMPDIFF(YEAR,'2004-08-31',NOW()), '세') as '장원영 만 나이',
+concat ('만', TIMESTAMPDIFF(YEAR,'2003-09-01',NOW()), '세') as '안유진 만 나이';
+SELECT TIMESTAMPDIFF(YEAR,'2004-08-31',NOW());
+
+
+
+
+select datediff(now(), '2024-02-28') as '이서가 빌려간 날 수' ;
+
+지난달 첫날, 지난달 마지막 날 출력 
+select DATE_add(date_add(last_day(now()), INTERVAL -2 MONTH),  interval +1 DAY) as '지난달 첫 날',
+last_day(date_add(now(), INTERVAL -1 MONTH)) as '지난달 마지막 날';
+
+SELECT date_add(DATE_ADD(last_day(now()), interval -2 month), interval 1 day);
+select last_day(now()), ;
+
+최근 1개월
+select date_add(date_sub(curdate(), interval 1 month), interval 1 day) as '최근 1개월 전', 
+curdate() as '오늘';
+
+최근 3개월
+
+select date_add(date_sub(curdate(), interval 3 month), interval 1 day) as '최근 3개월 전', 
+curdate() as '오늘';
+
+
+
+4) 
+select monthname('2024-03-11');
+select dayname
+
+5) select DATE, TIME
+SELECT DATEDIFF('값1', '값2'), TIMEDIFF('값1', '값2');
+
+
+3월에 태어난 여성 회원 목록 출력하기
+테이블 MEMBER_PROFLIE
+
+CREATE TABLE MEMBER_PROFLIE(MEMBER_ID VARCHAR(30), 
+MEMBER_NAME VARCHAR(10), 
+TLNO INT, 
+GENDER VARCHAR(3),
+DATE_OF_BIRTH DATE);
+
+INSERT INTO MEMBER_PROFLIE values ('jiho92@naver.com', '이지호', 01076432111, 'W', '1992-02-12');
+INSERT INTO MEMBER_PROFLIE values ('jiyoon22@hotmail.com', '김지윤', 01032324117, 'W', '1992-02-22');
+INSERT INTO MEMBER_PROFLIE values ('jihoon93@hanmail.net', '김지훈', 01023258688, 'M', '1993-02-23');
+INSERT INTO MEMBER_PROFLIE values ('seoyeons@naver.com', '박서연', 01076482209, 'W', '1993-03-16');
+INSERT INTO MEMBER_PROFLIE (MEMBER_ID, MEMBER_NAME, GENDER, DATE_OF_BIRTH) values ('yoonsy94@gmail.com', '윤서연', 'W', '1994-03-19');
+
+INSERT INTO MEMBER_PROFLIE values ('abcd1234@naver.com', '가나다', null, 'W', '1992-03-12');
+update member_proflie set member_id = 'yoonsy94@gmail.com' where member_name = '윤서연';
+
+
+SELECT MEMBER_ID, MEMBER_NAME, GENDER, DATE_OF_BIRTH FROM MEMBER_PROFLIE
+WHERE GENDER = 'W' and MONTH(DATE_OF_BIRTH) = 3 and TLNO = NULL order by MEMBER_ID;
+
+TLNO != NULL and 
+select datetime(DATE_OF_BIRTH) from member_proflie;
+
+alter member_proflie add column date_time 
