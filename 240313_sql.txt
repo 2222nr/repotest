@@ -1,0 +1,112 @@
+select timestampdiff(day, '2024-02-28', curdate()) as '대여한 일수';
+
+
+지난달 첫날, 지난달 마지막 날 출력 
+
+select last_day(now()) - interval 2 month + interval 1 day as '지난달 첫날',
+last_day(now()) - interval 1 month as '지난달 마지막날';
+
+
+select curdate() - interval 1 month +interval 1 day as '최근 1개월 전', 
+curdate() as '오늘';
+
+select curdate() - interval 3 month +interval 1 day as '최근 3개월 전', 
+curdate() as '오늘';
+
+
+4. 논리 함수
+1) IF, IFNULL
+SELECT IF(조건식, 참일때 값, 거짓일때 값);
+SELECT IF(MONTH(NOW()) =3, 'OK', 'NO'); 
+SELECT IFNULL(
+
+5. 통계 함수 및 CASE 구문
+1)
+
+2) CASE 구문 (=자바 SWITCH문)
+CASE 값
+WHEN 값1 THEN 내용
+WHEN 값2 THEN 내용
+END
+
+
+문제10> 오늘의 요일 
+1) 
+SELECT CURDATE() AS '오늘은', CASE DAYOFWEEK(NOW())
+WHEN 1 THEN '일요일'
+WHEN 2 THEN '월요일'
+WHEN 3 THEN '화요일'
+WHEN 4 THEN '수요일'
+WHEN 5 THEN '목요일'
+WHEN 6 THEN '금요일'
+WHEN 7 THEN '토요일'
+END AS '무슨요일?';
+
+2) 
+SELECT CURDATE() AS '오늘은', CONCAT(MID('일월화수목금토', DAYOFWEEK(NOW()), 1), '요일') AS '무슨요일?';
+
+3)
+SELECT CURDATE() AS '오늘은', CONCAT(SUBSTRING('일월화수목금토', DAYOFWEEK(NOW()), 1), '요일') AS '무슨요일?';
+
+6. 중복제거 Distinct
+SELECT DISTINCT 컬럼명 FROM 테이블
+SELECT COUNT(DISTINCT belong) FROM STUDENT;
+
+7. Limit와 offset
+select * from student limit 3;
+
+id 를 내림차순으로 정렬 후 위에서 3개 출력
+select * from student order by id desc limit 3;
+
+id 를 내림차순으로 정렬 후 위에서 5번째부터 2개 출력
+select * from student order by id desc limit 5, 2;
+
+source C:/javawork/mysql/girl_song_schema.sql
+source C:/javawork/mysql/girl_song_data.sql
+
+◆ JOIN
+
+girl_group as g
+song as s
+
+1) inner 조인 (기본 join, 기준 조건에 맞지 않으면 안가져옴)
+select g._id, g.name, s.title from girl_group as g inner JOIN song as s ON s._id = g.hit_song_id; 
+ = select g._id, g.name, s.title from girl_group as g JOIN song as s ON s._id = g.hit_song_id;  =>inner 생략 가능
+ = select g._id, g.name, s.title from girl_group as g JOIN song as s WHERE s._id = g.hit_song_id;  => ON 대신 WHERE도 사용 가능
+
+select g._id, g.name, s.title, s.lyrics from song as s inner JOIN girl_group as g ON s._id = g.hit_song_id; 
+
+2) LEFT OUTER JOIN
+
+select g._id, g.name, s.title from girl_group as g LEFT JOIN song as s ON s._id = g.hit_song_id;
+ = select g._id, g.name, s.title from song as s RIGHT JOIN girl_group as g ON s._id = g.hit_song_id; 
+ 
+3) RIGHT OUTER JOIN
+
+select g._id, g.name, s.title from girl_group as g RIGHT JOIN song as s ON s._id = g.hit_song_id;
+ = select g._id, g.name, s.title from song as s LEFT JOIN girl_group as g ON s._id = g.hit_song_id; 
+
+select g._id, g.name, s.title from girl_group as g 
+LEFT JOIN song as s ON s._id = g.hit_song_id where g.hit_song_id is null;
+
+select g._id, g.name, s.title from girl_group as g 
+RIGHT JOIN song as s ON s._id = g.hit_song_id where g.name is null;
+
+문제1 > 가사 중에 'me'를 포함하는 자료의 id, 그룹이름, 가사를 출력하세요
+
+select g._id, g.name as '그룹이름', s.lyrics as '가사' from girl_group as g left join song as s 
+On s._id = g.hit_song_id where lyrics like '%me%';
+
+문제2 > 데뷔년도가 2011년인 그룹의 이름과 히트송을 출력하세요
+
+select g.name, s.title from girl_group as g left join song as s
+On s._id = g.hit_song_id where debut like '2011%';
+
+문제3 > 데뷔년도를 기준으로 각 년도 당 데뷔한 걸그룹 수를 출력하세요
+
+select year(debut) as '데뷔년도', count(*) as '걸그룹 수' from girl_group group by year(debut);
+
+출력 예시
+2007   1
+2009   6
+2010   10
