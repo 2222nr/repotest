@@ -1,0 +1,104 @@
+3개의 테이블 합치기
+
+ - student 테이블 : p_id, name
+ - girl_group : _id, name, debut, hit_song_id
+ - song : _id, title, lyrics
+ - teacher : id, name, belong, phone
+
+teacher.id = student.p_id
+student.p_id = girl_group._id
+girl_group.hit_song_id = song._id 
+
+
+걸그룹 이름, 학생 이름, 데뷔일, 노래 제목
+
+
+select g.name as '걸그룹 이름', st.name as '학생 이름', g.debut as '데뷔일', s.title as '노래 제목' from girl_group as g join student as st on st.p_id = g._id 
+join song as s on s._id = g.hit_song_id; 
+
+
+데뷔해가 2009년인 자료중에서 학생이름이 두글자인 자료만 검색
+
+select g.name as '걸그룹 이름', st.name as '학생 이름', g.debut as '데뷔일', s.title as '노래 제목' 
+from girl_group as g join student as st on st.p_id = g._id join song as s on s._id = g.hit_song_id
+where g.debut like '2009%' and st.name like '__'; 
+
+ => select g.name as '걸그룹 이름', st.name as '학생 이름', g.debut as '데뷔일', s.title as '노래 제목' 
+from girl_group as g join student as st on st.p_id = g._id join song as s on s._id = g.hit_song_id
+where g.debut like '2009%' and char_length(st.name) = 2; 
+
+걸그룹 이름, 학생 이름, 데뷔일, 노래 제목, teacher.이름, phone
+
+select g.name, st.name, g.debut, s.title, t.name, t.phone  
+from girl_group as g join student as st on st.p_id = g._id 
+join song as s on s._id = g.hit_song_id
+join teacher as t on t.id = st.p_id;
+
+
+create table emp (id int primary key, name varchar(10), super_id int);
+
+insert into emp(id, name) values(1, '김사장'), (5, '박고문');
+
+insert into emp values (2, '정과장', 1), (3, '최대리', 2), (4, '이대리', 2) ;
+
+emp1.id = emp2.super_id
+
+select emp1.name as '상사', emp2.name as '직원' from emp as emp1 join emp as emp2 on emp1.id = emp2.super_id; 
+select emp1.name, emp2.name from emp as emp1 left join emp as emp2 on emp1.super_id = emp2.id; 
+
+서브 쿼리 (join 없이 서브 쿼리를 이용해 검색)
+
+1. 결과 = 1 (1개보다 크면 오류 : ERROR 1242 (21000): Subquery returns more than 1 row)
+select * from girl_group where hit_song_id = (select _id from song where lyrics like '%Give%');
+
+2. 결과 > 1
+select * from girl_group where hit_song_id in (select _id from song where lyrics like '%e%');
+
+3. 
+select gg.name, gg.debut,
+(select title from song where title is not NULL and lyrics Like '%e%' and gg.hit_song_id = song._id) as hitsong 
+from girl_group as gg;
+ => select gg.name, gg.debut, s.title from girl_group as gg 
+join song as s on gg.hit_song_id = s._id where s.lyrics like '%e%';
+
+
+create table test1(p_id int primary key, p_name varchar(10));
+create table test2(c_id int, c_name varchar(10), p_id int, 
+constraint fk_pid 
+foreign key(p_id) 
+references test1(p_id) on delete cascade);
+
+on delete cascade => 참조 키가 사라지면 해당 데이터도 삭제 (고아 객체?)
+on update cascade => 참조 키가 업데이트 되면 해당 데이터도 업데이트! 
+
+insert into test1 values(1, 'IVE'), (2, 'BTS');
+insert into test2 values(1, '안유진', 1), (2, '정국', 2), (3, '뷔', 2), (4, '장원영', 1), (5, '슈가', 2);
+
+< 다시 확인해보기 >
+제약 조건 삭제
+alter table test2 drop foreign key fk_pid;
+
+재추가(불가)
+alter table test2 
+add constraint fk_pid 
+constraint fk_pid 
+foreign key(p_id); 
+
+테이블 삭제 후 재생성
+delete from test2;
+
+create table test2(c_id int, c_name varchar(10), p_id int, 
+constraint fk_pid 
+foreign key(p_id) 
+references test1(p_id) on delete cascade);
+
+트랜잭션(Transaction) 
+START TRANSACTION;   => 	SQL 추적 시작
+insert into test2 values(2, '장원영', 1);
+
+COMMIT; => 적용
+
+rollback;  =>   모든 작업을 되돌린다. (추적 시작 시점 또는 commit 시점)
+
+
+show variables like '%commit%';
