@@ -1,0 +1,39 @@
+This is deprecated 
+
+DTO
+Entity => Class
+ -> 멤버 = sql 필드 이름 같아야함
+ -> Entity 클래스에 담은 후 JPA를 통해 테이블 생성 가능
+
+HTML FILE -> DTO -> Entity (JDK) -> DB
+
+
+
+db
+ - db연결 (db연결 통로 생성)
+exception
+ - 예외처리
+dto
+ - 데이터 접근 CRUD 
+view
+ - 화면 구현
+service
+ - 
+
+
+record 타입 클래스
+ - 생성자 생성하지 않아도 됨.
+ - toString(), equals(), hashcode() 재정의하지 않아도 됨!
+ - 기본적인 동작 재정의 가능
+ - getter 제공, 근데 setter 없음! 생성자를 이용해 값을 받아야 함.
+
+
+PreparedStatement => 씨퀄을 담아가서 커넥트 통로로 데이터를 가져오고 가져가는애애애애
+변수에 씨퀄을 넣고 PreparedStatement 객체에 담아서!  보내!
+
+
+executeUpdate();
+executeQuery();
+
+while(rs.next()){}   => next() boolean
+다음 거싱 없으면 false
